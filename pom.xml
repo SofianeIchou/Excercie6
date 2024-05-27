@@ -8,10 +8,10 @@
 		<version>3.2.5</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.exo3</groupId>
-	<artifactId>Exercice3</artifactId>
+	<groupId>com.exo2</groupId>
+	<artifactId>Exercice2</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>Exercice3</name>
+	<name>Exercice2</name>
 	<description>Spring boot jpa</description>
 	<properties>
 		<java.version>17</java.version>
