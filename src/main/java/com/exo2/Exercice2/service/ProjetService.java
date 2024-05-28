@@ -33,12 +33,7 @@ public class ProjetService {
     }
 
     public ProjetDto save(ProjetDto projetDto) {
-        Projet projet = projetMapper.toEntity(projetDto);
-
-        for(Etudiant etudiant: projet.getEtudiants()) {
-            etudiant.getProjets().add(projet);
-        }
-        return projetMapper.toDto(projetRepository.save(projet));
+        return projetMapper.toDto(projetRepository.save(projetMapper.toEntity(projetDto)));
     }
 
 }

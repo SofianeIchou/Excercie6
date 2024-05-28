@@ -8,7 +8,9 @@ import com.exo2.Exercice2.repository.EtudiantRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @AllArgsConstructor
@@ -25,12 +27,7 @@ public class EtudiantService {
     }
 
     public EtudiantDto save(EtudiantDto etudiantDto) {
-        Etudiant etudiant = etudiantMapper.toEntity(etudiantDto);
-        for(Projet projet : etudiant.getProjets())
-        {
-            projet.getEtudiants().add(etudiant);
-        }
-        return etudiantMapper.toDto(etudiantRepository.save(etudiant));
+        return etudiantMapper.toDto(etudiantRepository.save(etudiantMapper.toEntity(etudiantDto)));
     }
 
     public List<EtudiantDto> findByNom(String nom) {
