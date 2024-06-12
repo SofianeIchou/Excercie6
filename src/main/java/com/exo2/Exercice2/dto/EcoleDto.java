@@ -16,5 +16,4 @@ public class EcoleDto {
     private String nom;
     private String domaine;
     private List<EtudiantDto> etudiants;
-    private AdresseDto adresse;
 }

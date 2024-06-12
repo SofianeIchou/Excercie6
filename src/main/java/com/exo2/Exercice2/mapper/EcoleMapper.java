@@ -6,7 +6,7 @@ import org.mapstruct.Mapper;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring", uses = {EtudiantMapper.class, AdresseMapper.class})
+@Mapper(componentModel = "spring", uses = {EtudiantMapper.class})
 public interface EcoleMapper {
     // Single Object
     Ecole toEntity(EcoleDto ecoleDto);

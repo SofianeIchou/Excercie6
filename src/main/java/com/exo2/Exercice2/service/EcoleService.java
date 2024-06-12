@@ -26,11 +26,7 @@ public class EcoleService {
 
     public EcoleDto save(EcoleDto ecoleDto) {
         Ecole ecole = ecoleMapper.toEntity(ecoleDto);
-        for(Etudiant e : ecole.getEtudiants()) {
-            e.setEcole(ecole);
-        }
-
-        ecole.getAdresse().setEcole(ecole);
+        ecole.getEtudiants().stream().forEach(e -> e.setEcole(ecole));
         return ecoleMapper.toDto(ecoleRepository.save(ecole));
     }
 }

@@ -26,8 +26,4 @@ public class Etudiant {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ecole_id")
     private Ecole ecole;
-
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinTable(name = "etudiant_projet", joinColumns = @JoinColumn(name = "etudiant_id"), inverseJoinColumns = @JoinColumn(name = "projet_id"))
-    private List<Projet> projets;
 }
