@@ -5,15 +5,11 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class EtudiantDto {
+public class ProjetDto {
     @Schema(accessMode = Schema.AccessMode.READ_ONLY)
     private Long id;
-    private String nom;
-    private String prenom;
-    List<ProjetDto> projets;
+    private String nomProjet;
 }

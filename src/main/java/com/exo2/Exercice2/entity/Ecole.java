@@ -4,11 +4,12 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.BatchSize;
 
 import java.util.List;
 
 @Entity
-@Table(name = "ecole")
+@Table(name = "ecole", indexes = @Index(name = "nom_ecole_index", columnList = "nom_ecole"))
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -25,5 +26,10 @@ public class Ecole {
     private String domaine;
 
     @OneToMany(mappedBy = "ecole", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @BatchSize(size = 10)
     private List<Etudiant> etudiants;
+
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "adresse_id")
+    private Adresse adresse;
 }

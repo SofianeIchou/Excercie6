@@ -5,6 +5,11 @@ import com.exo2.Exercice2.entity.Etudiant;
 import com.exo2.Exercice2.mapper.EtudiantMapper;
 import com.exo2.Exercice2.repository.EtudiantRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,29 +23,25 @@ public class EtudiantService {
     private final EtudiantRepository etudiantRepository;
     private final EtudiantMapper etudiantMapper;
 
-    public List<EtudiantDto> findAll() {
-        return etudiantMapper.toDtos(etudiantRepository.findAll());
+    @Cacheable("etudiant")
+    public Page<EtudiantDto> findAll(Pageable pageable ) {
+        return etudiantRepository.findAll(pageable).map(etudiantMapper::toDto);
     }
 
     public EtudiantDto findById(Long id) {
         return etudiantMapper.toDto(etudiantRepository.findById(id).orElse(null));
     }
 
+    public EtudiantDto findOneByNomAndPrenom(String nom, String prenom) {
+        return etudiantMapper.toDto(etudiantRepository.findOneEtudiantByNomAndPrenom(nom, prenom).orElse(null));
+    }
+
+    @CachePut(value = "etudiant", key = "#etudiantDto.id")
     public EtudiantDto save(EtudiantDto etudiantDto) {
         return etudiantMapper.toDto(etudiantRepository.save(etudiantMapper.toEntity(etudiantDto)));
     }
 
     public EtudiantDto update(Long id, EtudiantDto etudiantDto) {
-        // vous pouvez aussi utiliser cette ligne si vous n'êtes pas familier avec l'API de flux
-//        Optional<Etudiant> optionalEtudiant = etudiantRepository.findById(id);
-//        if(optionalEtudiant.isPresent()) {
-//            Etudiant etudiant = etudiantMapper.toEntity(etudiantDto);
-//            etudiant.setId(id);
-//            if(Objects.nonNull(optionalEtudiant.get().getEcole()))
-//                etudiant.setEcole(optionalEtudiant.get().getEcole());
-//            return etudiantMapper.toDto(etudiantRepository.save(etudiant));
-//        }
-//        return null;
         return etudiantRepository.findById(id)
                 .map(existingEtudiant -> {
                     Etudiant etudiant = etudiantMapper.toEntity(etudiantDto);
@@ -48,11 +49,15 @@ public class EtudiantService {
                     if (Objects.nonNull(existingEtudiant.getEcole())) {
                         etudiant.setEcole(existingEtudiant.getEcole());
                     }
+                    if(Objects.nonNull(existingEtudiant.getProjets()) || existingEtudiant.getProjets().size() != 0) {
+                        etudiant.setProjets(existingEtudiant.getProjets());
+                    }
                     return etudiantMapper.toDto(etudiantRepository.save(etudiant));
                 })
                 .orElse(null);
     }
 
+    @CacheEvict(value = "etudiant", key = "#id")
     public void delete(Long id) {
         etudiantRepository.deleteById(id);
     }
